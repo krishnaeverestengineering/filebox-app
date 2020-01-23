@@ -1,0 +1,26 @@
+.grid_root {
+    background-color: transparent;
+    height: calc(100vh - 140px);
+    margin-top: 10px;
+    flex-grow: 1;
+    overflow: scroll;
+
+}
+.grid_root, .component_filemenu {
+    width: 100%;
+}
+.grid {
+    padding:10px 0px;
+    text-align: center;
+}
+.box {
+    padding: 10px;
+    cursor: pointer;
+    background: white;
+    /*box-shadow: rgba(158, 163, 172, 0.3) 5px 5px 20px;*/
+    overflow: hidden;
+    position: relative;
+}
+.root {
+    margin-top: 40px;
+}
