@@ -18,7 +18,7 @@ class CreateFolderPopup extends React.Component {
     onSave(e) {
         e.preventDefault();
         if(this.state.name !== null){
-            this.props.onSave(this.state.name);
+            this.props.onFolderCreate(this.state.name);
             this.props.closePopup();
         }
     }
@@ -26,23 +26,36 @@ class CreateFolderPopup extends React.Component {
     render() {  
         return (  
             <div className='popup'>  
-                <div className='popup_inner'>  
-                    <h5>New Folder</h5>  
-                    <form noValidate autoComplete="off">
-                        <TextField id="standard-basic" label="Untitled Folder" 
-                        onChange={(e) => this.setState({name: e.target.value})}/>
-                    </form>
-                    <div>
-                        <Button onClick={this.props.closePopup}>
-                            <Typography>
-                                CLOSE
-                            </Typography>
-                        </Button> 
-                        <Button onClick =  {this.onSave.bind(this)}>
-                            <Typography>
-                                CREATE
-                            </Typography>
-                        </Button> 
+                <div className='popup_inner'> 
+                    <div className='popup_content'>
+                        <div>
+                            <h4>{this.props.text}</h4> 
+                        </div>
+                        <div>
+                            <form noValidate autoComplete="off">
+                                <TextField id="standard-basic" label="Folder Name" 
+                                onChange={(e) => this.setState({name: e.target.value})}
+                                style={{width: "340px"}}/>
+                            </form>
+                        </div>
+                        <div style={{width: "340px", display: "flex", justifyContent: "flex-end"}}>
+                            <Button 
+                            className = "btn"
+                            disableElevation
+                            variant="contained" onClick={this.props.closePopup} color="secondary">
+                                <Typography>
+                                    CLOSE
+                                </Typography>
+                            </Button> 
+                            <Button 
+                            className = "btn"
+                            disableElevation
+                            variant="contained" onClick =  {this.onSave.bind(this)} color="primary">
+                                <Typography>
+                                    CREATE
+                                </Typography>
+                            </Button> 
+                        </div>
                     </div>
                 </div>  
             </div>  
@@ -52,7 +65,6 @@ class CreateFolderPopup extends React.Component {
 
 const mapDispatchToProps = dispatch => {
     return {
-      // explicitly forwarding arguments
       onSave: file => dispatch(createFolderAction(file)),
     }
   }

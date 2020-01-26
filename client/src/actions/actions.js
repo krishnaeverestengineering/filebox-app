@@ -1,21 +1,13 @@
 import * as types from "./actionTypes"
 
-export const checkSignIn = () => {
-    return ({type: types.CHECK_SIGNIN});
+export const getAccessTokenAction = (uid) => {
+    return ({type: types.CHECK_SIGNIN, userId: uid});
 }
 
-export const setRedirectUrl = (url) => {
-    console.log(url)
-    return ({
-        type: types.SET_REDIRECT_URL,
-        redirectionUrl : url
-    })
-}
-
-export const authenticateUserAction = (params) => {
+export const authenticateUserAction = (userId) => {
     return ({
         type: types.AUTHENTICATE_USER,
-        urlParams: params
+        uid: userId
     });
 }
 
@@ -37,6 +29,11 @@ export const StartGoogleSignIn = () => {
 
 export const GoogleInitSuccess = (auth) => {
     return ({type: types.GOOGLE_INIT_SUCCESS, authObj: auth})
+}
+
+export const onFolderSelected = (id) => {
+    return ({ type: types.ON_FOLDER_SELECTED, path: id}
+    )
 }
 
 export const getFiles = (path) => {

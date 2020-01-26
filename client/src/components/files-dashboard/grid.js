@@ -17,8 +17,8 @@ class GridLayout extends React.PureComponent {
                     {
                         this.props.files.map(f => {
                             return (
-                                <Grid item key = {f} xs = {3} >
-                                    <FileItem file = {f}/>
+                                <Grid item key = {f.id} xs = {2} >
+                                        <FileItem onFileSelected = {this.props.onFileSelected} file = {f}/>
                                 </Grid>
                             )
                         })

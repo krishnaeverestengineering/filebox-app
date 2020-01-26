@@ -1,54 +1,89 @@
-import React from "react";
+import React, {Fragment} from "react";
 import {connect} from "react-redux";
-import {Redirect} from "react-router-dom";
-import {InitGoogleSignIn, authenticateUserAction} from "../../actions/actions"
-import { Button } from "@material-ui/core";
-import * as types from "../../actions/actionTypes";
-import { urlParams } from "../../helpers";
+import { 
+    Button, 
+    Typography,
+} from "@material-ui/core";
+import {
+    getAccessTokenAction,
+} from "../../actions/actions";
+import { NgShow } from "../../components/helpers/ngif";
+const {OAuth2Client} = require('google-auth-library');
+
 
 class LoginPage extends React.PureComponent {
 
-    componentDidMount() {
-        this.props.dispatch(authenticateUserAction(123))
+    CLIENT_ID = "422393599134-73gn0s2am4dhu7unaaipfecuhr62a69m.apps.googleusercontent.com";
+    client = new OAuth2Client(this.CLIENT_ID);
+    constructor(props) {
+        super(props);
+        this.state = {
+            auth: null,
+            isLoading: true,
+        }
     }
 
-    componentWillReceiveProps(newProps) {
-        // const user = newProps.auth.currentUser.get().getId()
-        // console.log(user)
-        // console.log("props received")
-        // if(user.get())
-        //     this.props.dispatch(authenticateUserAction(user.get().getId()))
+    componentDidMount() {
+        console.log(this.props)
+        window.gapi.load('client:auth2', async () => {
+            window.gapi.client.init({
+                clientId: this.CLIENT_ID,
+                scope: "email",
+
+            }).then(() => {
+                this.setState({
+                    auth: window.gapi.auth2.getAuthInstance(),
+                    isLoading: false,
+                });
+                this.state.auth.isSignedIn.listen(this.onSignInChanged);
+                this.onSignInChanged(this.state.auth.isSignedIn.get());
+            });
+        })
+    }
+
+    veirfyIdToken = async (id_token) => {
+        console.log(id_token)
+        const ticket = await this.client.verifyIdToken({
+            idToken: id_token,
+            audience: this.CLIENT_ID,
+        });
+        const payload = ticket.getPayload();
+        return payload['sub'];
+    }
+
+    onSignInChanged = async (isSignedIn) => {
+        console.log(isSignedIn);
+        if(isSignedIn) {
+            const id_token = this.state.auth.currentUser.get().getAuthResponse().id_token;
+           // const userId = await this.veirfyIdToken(id_token);
+            this.props.dispatch(getAccessTokenAction("115223032220880643634"))
+        }
+        else {
+            console.log("logout")
+        }
     }
 
     onGoogleSignInClicked = () => {
-        this.props.auth.signIn();
+        this.state.auth.signIn();
     }
 
     render() {
-        if(this.props.isSignedIn) {
-            return (
-                <Redirect to = "/files" />
-            )
-        } else {
-            return (
-
-                <div>
-                   
+        return (
+            <Fragment>
+                <NgShow cond = {!this.props.isSignedIn}>
                     <Button onClick = {this.onGoogleSignInClicked}
                         variant = "contained" 
                         color = "secondary" >
                         Sign In with Google
                     </Button>
-                </div>
-            )
-        } 
+                </NgShow>
+            </Fragment>
+        )
     }
 }
 
 export const mapStateToProps = (state) => {
-    console.log(state)
     return {
-        auth: state.signInReducers.auth,
         isSignedIn : state.signInReducers.isSignedIn
     }
 }

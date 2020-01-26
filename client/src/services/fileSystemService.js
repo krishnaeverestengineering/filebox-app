@@ -1,12 +1,17 @@
 import axios from "axios";
+import { getBearerToken } from "../helpers";
 
 const axios_instance = axios.create({
-    baseURL: " http://127.0.0.1:8082",
+    baseURL: " http://127.0.0.1:9091",
     withCredentials: true,
 });
 
-export const createFolderService = (userId) => {
-    return axios_instance.get("/createFolder?userId=" + userId).then(res => {
+export const createFolderService = (data) => {
+    return axios_instance.post("/create-folder", data, {
+        headers: {
+            "Authorization": getBearerToken()
+        }
+    }).then(res => {
         return res;
     }).catch(e => {
         return e;
@@ -22,8 +27,11 @@ export const createUserService = (userId) => {
 }
 
 export const getFiles = (path) => {
-    console.log(path)
-    return axios_instance.get("/ls?folder=" + path.dir).then(res => {
+    return axios_instance.get("/ls?path=" + path.dir, {
+        headers: {
+            "Authorization": getBearerToken()
+        }
+    }).then(res => {
         return res;
     }).catch(e => {
         return e;

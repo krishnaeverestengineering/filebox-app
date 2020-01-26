@@ -7,54 +7,67 @@ import {
     Grid,
     Paper
  } from "@material-ui/core"
-import { FileMenu } from "../../components/files-dashboard/fileMenu"
+import FileMenu from "../../components/files-dashboard/fileMenu"
 import FileItem from "../../components/files-dashboard/fileItem"
 import GridLayout from "../../components/files-dashboard/grid"
 import { NgIf, NgShow } from "../../components/helpers/ngif"
-import {getFiles} from "../../actions/actions";
+import {getFiles, createFolderAction} from "../../actions/actions";
 import CreateFolder from "../../components/popup/createfolder";
 import { EventReceiver } from "../../components/events"
+import { urlParams } from "../../helpers"
 
 class FilesDashboard extends Component {
-
-    constructor(props){
-        super(props);  
-        console.log(props.emit)
-        this.state = { showPopup: false };  
-        }  
-        
-          togglePopup() {  
-        this.setState({  
-             showPopup: !this.state.showPopup  
-        });  
-         }  
-
     componentDidMount() {
-        this.props.dispatch(getFiles(this.props.path))
+        this.props.dispatch(getFiles(this.getPath()))
+    }
+
+    onFileSelected = (file) => {
+        console.log(file.filename);
+        this.props.history.push("?path=" + file.id)
+        this.props.dispatch(getFiles(file.id))
+    }
+
+    onFolderCreate = (name) => {
+        console.log(name)
+        this.props.dispatch(createFolderAction({
+            name: name,
+            pid: this.getPath()
+        }));
+    }
+
+    componentWillReceiveProps(newProps) {
+        if(this.props.location.search != newProps.location.search) {
+            this.props.dispatch(getFiles(this.getPath()))
+        }
+    }
+
+    getPath = () => {
+        const params = urlParams()
+        if("path" in params) {
+            return params.path;
+        }
+        return "/";
     }
 
     render() {
         return (
             <div>
-                 <button onClick={this.togglePopup.bind(this)}> Click To Launch Popup</button> 
-                    {this.state.showPopup ?  
-                        <CreateFolder  
-                                text='Click "Close Button" to hide popup'  
-                                closePopup={this.togglePopup.bind(this)}  
-                        />  
-                        : null  
-                    }   
                 <Header />
                 <div className = "root">
                     <Container maxWidth = "md">
                         <div>
-                            <FileMenu />
+                            <FileMenu onFolderCreate = {this.onFolderCreate} />
                         </div> 
-                        <NgShow cond = {!this.props.loading}>
-                            <div className = "grid_root">
-                                <GridLayout files = {this.props.files}/>
-                            </div>
-                        </NgShow>
+                        <div>
+                            <NgShow cond = {!this.props.loading && this.props.files.length > 0}>
+                                <div className = "grid_root">
+                                    <GridLayout onFileSelected = {this.onFileSelected} files = {this.props.files}/>
+                                </div>
+                            </NgShow>
+                            <NgShow cond = {this.props.files.length <= 0}>
+                                <h4 style={{textAlign: "center"}}>Empty Folder</h4>
+                            </NgShow>
+                        </div>
                     </Container>
                 </div>
             </div>
@@ -63,10 +76,8 @@ class FilesDashboard extends Component {
 }
 
 const mapStateToProps = (state) => {
-    console.log(state)
     return {
         loading: state.loading, 
-        path: state.filesDashboardReducers.path,
         files: state.filesDashboardReducers.folders,
     }
 }

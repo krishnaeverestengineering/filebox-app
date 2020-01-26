@@ -4,5 +4,4 @@ import {InitGoogleSignIn} from "../actions/actions"
 
 export default function*() {
     yield fork(watchSagas);
-    yield put(InitGoogleSignIn());
 }

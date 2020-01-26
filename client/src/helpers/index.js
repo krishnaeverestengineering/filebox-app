@@ -14,3 +14,11 @@ export function urlParams() {
         return mem;
     }, {})
 }
+
+export const getBearerToken = () => {
+    const token = localStorage.getItem("token");
+    if(token != "" || token != "undefined") {
+        return "Bearer " + token;
+    }
+    return "";
+}

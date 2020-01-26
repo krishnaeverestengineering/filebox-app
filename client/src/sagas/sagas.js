@@ -1,42 +1,30 @@
 import {put, call} from "redux-saga/effects";
-import {getFiles} from "../services/fileSystemService";
+import {getFiles, createFolderService} from "../services/fileSystemService";
 import {
-    googleSignInInit,
     authenticateUserToServerService,
-    checkSignIn,
+    getAccessToken,
 } from "../services/authenticationService";
 import {
-    GoogleInitSuccess, 
     authenticateUserResponseAction,
     getFilesResponseAction,
 } from "../actions/actions";
 
-export const initGoogleSignIn = function*() {
-    try {
-        const res = yield call(googleSignInInit);
-        yield put(GoogleInitSuccess(res));
-    }
-    catch(err) {
-
-    }
-}
-
 export const checkSignInSaga = function*() {
     try {
-        const res = yield call(checkSignIn);
-        if(res.ok) {
-
-        }
+        const res = yield call(getAccessToken);
+        localStorage.setItem("token", res.data.access_token);
+        const res1 = yield call(authenticateUserToServerService);
+        yield put(authenticateUserResponseAction(res1.data))
     }
     catch(e) {
 
     }
 }
 
-export const authenticateUserToServerSaga = function*(params) {
+export const authenticateUserToServerSaga = function*() {
     try {
-        const res = yield call(authenticateUserToServerService, params.urlParams);
-        yield put(authenticateUserResponseAction(res.data))
+        const res = yield call(authenticateUserToServerService);
+        //yield put(authenticateUserResponseAction(res.data))
     }
     catch(err) {
 
@@ -44,7 +32,13 @@ export const authenticateUserToServerSaga = function*(params) {
 }
 
 export const createFolderSaga = function*(action) {
-    console.log(action)
+    console.log(action.data.data)
+    try {
+        const response = yield call(createFolderService, action.data )
+        yield put(getFilesResponseAction(response.data.files))
+    }
+    catch(err) {
+    } 
 }
 
 export const getFilesSaga = function*(path) {
