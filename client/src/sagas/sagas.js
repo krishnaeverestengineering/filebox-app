@@ -9,9 +9,9 @@ import {
     getFilesResponseAction,
 } from "../actions/actions";
 
-export const checkSignInSaga = function*() {
+export const checkSignInSaga = function*(action) {
     try {
-        const res = yield call(getAccessToken);
+        const res = yield call(getAccessToken, action.userId);
         localStorage.setItem("token", res.data.access_token);
         const res1 = yield call(authenticateUserToServerService);
         yield put(authenticateUserResponseAction(res1.data))

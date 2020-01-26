@@ -24,15 +24,11 @@ const useStyles = makeStyles(theme => ({
     header_logout: {
         display: "block",
         float:"right",
-        paddingTop: 5
+        paddingTop: 7
     }
   }));
-
-  export const onSignoutClicked = () => {
-
-  }
   
-export const Header = () => {
+export const LoginHeader = (props) => {
     const classes = useStyles();
     return (
         <div className = {classes.root}>
@@ -48,8 +44,10 @@ export const Header = () => {
                     </Grid>
                     <Grid item xs = {6} >
                         <div className = {classes.header_logout}>
-                            <Button onClick = {onSignoutClicked}>
-                                Signout
+                            <Button onClick = {props.onSignInClicked}
+                                variant = "contained" 
+                                disableElevation >
+                                Sign In
                             </Button>
                         </div>
                     </Grid>

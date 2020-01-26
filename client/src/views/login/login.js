@@ -3,11 +3,13 @@ import {connect} from "react-redux";
 import { 
     Button, 
     Typography,
+    Container,
 } from "@material-ui/core";
 import {
     getAccessTokenAction,
 } from "../../actions/actions";
 import { NgShow } from "../../components/helpers/ngif";
+import { LoginHeader } from "../../components/login-header";
 const {OAuth2Client} = require('google-auth-library');
 
 
@@ -56,7 +58,7 @@ class LoginPage extends React.PureComponent {
         if(isSignedIn) {
             const id_token = this.state.auth.currentUser.get().getAuthResponse().id_token;
            // const userId = await this.veirfyIdToken(id_token);
-            this.props.dispatch(getAccessTokenAction("115223032220880643634"))
+            this.props.dispatch(getAccessTokenAction(this.state.auth.currentUser.get().getId()))
         }
         else {
             console.log("logout")
@@ -70,12 +72,23 @@ class LoginPage extends React.PureComponent {
     render() {
         return (
             <Fragment>
+                <LoginHeader onSignInClicked =  {this.onGoogleSignInClicked} />
                 <NgShow cond = {!this.props.isSignedIn}>
-                    <Button onClick = {this.onGoogleSignInClicked}
-                        variant = "contained" 
-                        color = "secondary" >
-                        Sign In with Google
-                    </Button>
+                    <Container style = {{top: "100%", paddingTop: "100px"}}>
+                        <div>
+                            <h1 style = {{textAlign: "center"}}>FILEBOX</h1>
+                        </div>
+                        <div>
+                            <h2 style = {{textAlign: "center"}}>
+                                Boost productivity with Filebox Storage
+                            </h2>
+                        </div>
+                        <div>
+                            <h4 style = {{textAlign: "center"}}>
+                                The simple file storage solution 
+                            </h4>
+                        </div>
+                    </Container>
                 </NgShow>
             </Fragment>
         )

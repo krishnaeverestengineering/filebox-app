@@ -6,8 +6,10 @@ var instance = axios.create({
     withCredentials: true,
 })
 
-export const getAccessToken = () => {
-    return instance.get("/token").then(res => {
+export const getAccessToken = (userId) => {
+    return instance.post("/token", {
+        "userId": userId
+    }).then(res => {
         return res;
     }).catch(err => {
         return err;
