@@ -37,3 +37,28 @@ export const getFiles = (path) => {
         return e;
     });
 }
+
+export const deleteFolderService = (file) => {
+    console.log(file)
+    return axios_instance.post("/del?id=" + file.data.id, {
+        headers: {
+            "Authorization": getBearerToken()
+        }
+    }).then(res => {
+        return res;
+    }).catch(e => {
+        return e;
+    });
+}
+
+export const renameFolderService = (file) => {
+    return axios_instance.get("/renm=" + file.id, {
+        headers: {
+            "Authorization": getBearerToken()
+        }
+    }).then(res => {
+        return res;
+    }).catch(e => {
+        return e;
+    });
+}

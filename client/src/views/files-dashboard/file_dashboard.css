@@ -20,7 +20,26 @@
     /*box-shadow: rgba(158, 163, 172, 0.3) 5px 5px 20px;*/
     overflow: hidden;
     position: relative;
+    height: 100px;
 }
 .root {
     margin-top: 40px;
+    display: flex;
+}
+
+.side-menu ul {
+    margin: 0px;
+    display: inline;
+}
+
+.side-menu > ul > li {
+    list-style: none;
+    line-height: 35px;
+    letter-spacing: 1px;
+    text-align: start;
+    margin: 0px;
+}
+.side-menu {
+    display: block;
+    padding-top: 1em;
 }

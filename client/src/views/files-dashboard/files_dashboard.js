@@ -5,7 +5,10 @@ import {Header} from "../../components/files-dashboard/header"
 import { 
     Container,
     Grid,
-    Paper
+    Paper,
+    Breadcrumbs,
+    Link,
+    Typography
  } from "@material-ui/core"
 import FileMenu from "../../components/files-dashboard/fileMenu"
 import FileItem from "../../components/files-dashboard/fileItem"
@@ -15,6 +18,7 @@ import {getFiles, createFolderAction} from "../../actions/actions";
 import CreateFolder from "../../components/popup/createfolder";
 import { EventReceiver } from "../../components/events"
 import { urlParams } from "../../helpers"
+import SideMenuBar from "../../components/files-dashboard/sidebar-menu"
 
 class FilesDashboard extends Component {
     componentDidMount() {
@@ -54,20 +58,35 @@ class FilesDashboard extends Component {
             <div>
                 <Header />
                 <div className = "root">
-                    <Container maxWidth = "md">
-                        <div>
-                            <FileMenu onFolderCreate = {this.onFolderCreate} />
-                        </div> 
-                        <div>
-                            <NgShow cond = {!this.props.loading && this.props.files.length > 0}>
-                                <div className = "grid_root">
-                                    <GridLayout onFileSelected = {this.onFileSelected} files = {this.props.files}/>
+                    <Container maxWidth = "xl">
+                        <Grid container>
+                            <Grid item xs = {2}>
+                                <SideMenuBar />
+                            </Grid>
+                            <Grid item xs = {7}>
+                                <Container>
+                                    <div>
+                                        <FileMenu onFolderCreate = {this.onFolderCreate} />
+                                    </div> 
+                                    <div>
+                                        <NgShow cond = {!this.props.loading && this.props.files.length > 0}>
+                                            <div className = "grid_root">
+                                                <GridLayout onFileSelected = {this.onFileSelected} files = {this.props.files}/>
+                                            </div>
+                                        </NgShow>
+                                        <NgShow cond = {this.props.files.length <= 0}>
+                                            <h4 style={{textAlign: "center"}}>Empty Folder</h4>
+                                        </NgShow>
+                                    </div>
+                                </Container>
+                            </Grid>
+                            <Grid item xs = {2}>
+                                <div>
+                                   
                                 </div>
-                            </NgShow>
-                            <NgShow cond = {this.props.files.length <= 0}>
-                                <h4 style={{textAlign: "center"}}>Empty Folder</h4>
-                            </NgShow>
-                        </div>
+                            </Grid>
+                        </Grid>
+                        
                     </Container>
                 </div>
             </div>

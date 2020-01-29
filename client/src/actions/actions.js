@@ -18,19 +18,6 @@ export const authenticateUserResponseAction = (data) => {
     });
 }
 
-
-export const InitGoogleSignIn = () => {
-    return({type: types.INIT_GOOGLE_SIGNIN})
-}
-
-export const StartGoogleSignIn = () => {
-    return({type: types.START_GOOGLE_SIGNIN});
-}
-
-export const GoogleInitSuccess = (auth) => {
-    return ({type: types.GOOGLE_INIT_SUCCESS, authObj: auth})
-}
-
 export const onFolderSelected = (id) => {
     return ({ type: types.ON_FOLDER_SELECTED, path: id}
     )
@@ -55,9 +42,22 @@ export const getFilesResponseAction = (files) => {
 }
 
 export const createFolderAction = (file) => {
-    console.log(file)
     return ({
         type: types.CREATE_FOLDER,
+        data: file,
+    })
+}
+
+export const deleteFolderAction = (file) => {
+    return ({
+        type: types.DELETE_FOLDER,
+        data: file,
+    })
+}
+
+export const renameFolderAction = (file) => {
+    return ({
+        type: types.RENAME_FOLDER,
         data: file,
     })
 }

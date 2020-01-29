@@ -5,6 +5,7 @@ import {
     checkSignInSaga,
     authenticateUserToServerSaga,
     createFolderSaga,
+    deleteFileSaga,
 } from "./sagas";
 
 export const watchSagas = function*() {
@@ -12,4 +13,5 @@ export const watchSagas = function*() {
     yield takeLatest(types.AUTHENTICATE_USER, authenticateUserToServerSaga);
     yield takeLatest(types.GET_FILES, getFilesSaga);
     yield takeLatest(types.CREATE_FOLDER, createFolderSaga);
+    yield takeLatest(types.DELETE_FOLDER, deleteFileSaga)
 }
