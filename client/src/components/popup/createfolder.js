@@ -1,11 +1,9 @@
 import React from 'react';  
 import './createfolder.css';  
-import { InputBase, TextField, Button, Typography } from '@material-ui/core';
-import {connect} from "react-redux";
-import {createFolderAction} from "../../actions/actions";
+import { TextField, Button, Typography } from '@material-ui/core';
+import Emitter from '../../helpers/events';
 
 class CreateFolderPopup extends React.Component {  
-
     constructor(props){
         super(props);
         this.state = {
@@ -13,14 +11,6 @@ class CreateFolderPopup extends React.Component {
             type: null,
             icon: null
         };
-    }
-
-    onSave(e) {
-        e.preventDefault();
-        if(this.state.name !== null){
-            this.props.onFolderCreate(this.state.name);
-            this.props.closePopup();
-        }
     }
 
     render() {  
@@ -35,25 +25,29 @@ class CreateFolderPopup extends React.Component {
                             <form noValidate autoComplete="off">
                                 <TextField id="standard-basic" label="Folder Name" 
                                 onChange={(e) => this.setState({name: e.target.value})}
-                                style={{width: "340px"}}/>
+                                style={{width: "340px"}}
+                                required/>
                             </form>
                         </div>
                         <div style={{width: "340px", display: "flex", justifyContent: "flex-end"}}>
                             <Button 
                             className = "btn"
                             disableElevation
-                            variant="contained" onClick={this.props.closePopup} color="secondary">
-                                <Typography>
-                                    CLOSE
-                                </Typography>
+                            variant="contained"
+                            onClick= { () => {Emitter.emit("file.createFolderCancle")}}
+                            color="secondary">
+                                <Typography> Close </Typography>
                             </Button> 
                             <Button 
                             className = "btn"
                             disableElevation
-                            variant="contained" onClick =  {this.onSave.bind(this)} color="primary">
-                                <Typography>
-                                    CREATE
-                                </Typography>
+                            variant="contained"
+                            onClick = { () => {
+                                if(this.state.name != "" && this.state.name != null )
+                                    Emitter.emit("file.createFolderConfirm", this.state.name)
+                            }}
+                            color="primary">
+                                <Typography> Create </Typography>
                             </Button> 
                         </div>
                     </div>
@@ -63,10 +57,4 @@ class CreateFolderPopup extends React.Component {
         }  
 }  
 
-const mapDispatchToProps = dispatch => {
-    return {
-      onSave: file => dispatch(createFolderAction(file)),
-    }
-  }
-
-export default connect(null, mapDispatchToProps)(CreateFolderPopup);
+export default CreateFolderPopup;

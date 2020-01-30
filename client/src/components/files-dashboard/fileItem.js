@@ -2,23 +2,13 @@ import React, { Fragment } from "react";
 import {connect} from "react-redux"
 import {getFiles} from "../../actions/actions";
 import {
-    Typography,
-    Button,
-    Container,
-    Grid,
     Paper,
     Menu,
     MenuItem,
-    Popper,
-    Grow,
-    ClickAwayListener,
-    MenuList
 } from "@material-ui/core";
-import { Route, HashRouter, Link, Router } from "react-router-dom";
-import { urlParams } from "../../helpers";
 import { Icon } from "../helpers/icons";
 import { NgShow } from "../helpers/ngif";
-import ConfirmationPopup from "../conffirmation-popup";
+import Emitter from "../../helpers/events";
 
 class FileItem extends React.Component {
 
@@ -41,31 +31,45 @@ class FileItem extends React.Component {
 
       handleRenameClicked = () => {
           this.handleOptionsClose();
-          this.props.renameFolder(this.props.file)
+          Emitter.emit("file.renameClick", this.props.file);
       }
       handleDeleteClicked = () => {
         this.handleOptionsClose();
-        this.props.deleteFolder(this.props.file)
+        Emitter.emit("file.deleteClick", this.props.file);
+    }
+
+    onItemSelected = (e) => {
+        e.preventDefault();
+        console.log(this.props.file)
+        this.props.dispatch(getFiles(this.props.file.path))
+        this.props.onFileSelected(this.props.file)
+    }
+
+    renderFileMenuOptions = (anchorEl) => {
+        return (
+<           Paper>
+                <Menu 
+                id="file-menu"
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={this.handleOptionsClose}>
+                    <MenuItem onClick = {this.handleDeleteClicked}>Delete</MenuItem>
+                    <MenuItem onClick = {this.handleRenameClicked}>Rename</MenuItem>
+                </Menu>
+            </Paper>
+        )
     }
 
     render() {
         const { anchorEl } = this.state;
         return (
             <Fragment>
-                <Paper>
-                    <Menu 
-                    id="file-menu"
-                    anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
-                    onClose={this.handleOptionsClose}
-                   >
-                        <MenuItem onClick = {this.handleDeleteClicked}>Delete</MenuItem>
-                        <MenuItem onClick = {this.handleRenameClicked}>Rename</MenuItem>
-                    </Menu>
-                </Paper>
+
+                { this.renderFileMenuOptions(anchorEl) }
                 
                 <Paper  
                     className = "box" 
+                    onClick = {this.onItemSelected}
                     onMouseEnter = {() => {
                         this.setState({
                             showOptions: true

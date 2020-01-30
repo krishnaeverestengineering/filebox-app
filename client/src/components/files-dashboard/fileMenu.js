@@ -1,20 +1,13 @@
 import React, { Fragment } from "react"
-import {
-    Typography,
-    Button,
-    Container,
-    Grid
-} from "@material-ui/core"
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import {connect} from "react-redux";
 import {compose} from "redux";
-import CreateFolderPopup from "../popup/createfolder";
+import Emitter from "../../helpers/events";
 
 const classes = theme => {
     return ({
         root: {
             flexGrow: 1,
-            //marginLeft: "-32px",
           },
           menubar: {
               padding: "5px 8px",
@@ -29,40 +22,21 @@ const classes = theme => {
 };
 
 class FileMenu extends React.Component {
-    constructor(props){
-        super(props);  
-        this.state = { showPopup: false };  
-    }  
-
-    togglePopup() {  
-        this.setState({  
-                showPopup: !this.state.showPopup  
-        });  
-    }
-
     render() {
         const { classes } = this.props;
         return (                    
             <Fragment>
-            <div className = {classes.root}>
-                {
-                    this.state.showPopup ?  
-                        <CreateFolderPopup  
-                                text='Create Folder'  
-                                closePopup={this.togglePopup.bind(this)}
-                                onFolderCreate = {this.props.onFolderCreate}
-                        />  
-                        : null  
-                }   
-                <div>
-                    <span className = {classes.menubar}>
-                        New File
-                    </span>
-                    <span className = {classes.menubar} onClick={this.togglePopup.bind(this)}>
-                        New Directory
-                    </span>
+                <div className = {classes.root}>
+                    <div>
+                        <span className = {classes.menubar}>
+                            New File
+                        </span>
+                        <span className = {classes.menubar} 
+                        onClick = { () => {Emitter.emit("file.createFolderClick")}}>
+                            New Directory
+                        </span>
+                    </div>
                 </div>
-            </div>
             </Fragment>
         )
     }

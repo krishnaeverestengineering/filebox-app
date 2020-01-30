@@ -4,18 +4,30 @@ import {
  } from "@material-ui/core"
 import FileItem from "./fileItem";
 import { connect } from "react-redux";
-import ConfirmationPopup from "../conffirmation-popup";
-import { NgIf } from "../helpers/ngif";
 import { deleteFolderAction } from "../../actions/actions";
+import Emitter from "../../helpers/events";
 
-class GridLayout extends React.PureComponent {
+class FileSystem extends React.PureComponent {
     constructor(props){
         super(props);  
         this.state = { 
             confirmationPopup: false,
             file: null
          };  
-    }  
+    }
+
+    componentDidMount() {
+        Emitter.on("file.deleteConfirmation", (file) => {
+            this.setState({
+                confirmationPopup: true,
+                file: file
+            })
+        })
+    }
+
+    componentWillUnmount() {
+        Emitter.off("file.deleteConfirmation")
+    }
 
     deleteFolder = (file) => {
         console.log(file.filename)
@@ -30,7 +42,6 @@ class GridLayout extends React.PureComponent {
     }
 
     onClosePopup = () => {
-        console.log("cancled")
         this.setState({
             confirmationPopup : false,
             file: null
@@ -38,7 +49,6 @@ class GridLayout extends React.PureComponent {
     }
 
     onClickYes = () => {
-        console.log("confirmed")
         this.setState({
             confirmationPopup : false
         })
@@ -48,12 +58,6 @@ class GridLayout extends React.PureComponent {
     render() {
         return (
             <div className = "grid">
-                <NgIf cond = {this.state.confirmationPopup}>
-                    <ConfirmationPopup onClosePopup = {this.onClosePopup}
-                        onClickYes = {this.onClickYes}
-                         text = "Are you sure to Delete Folder?" />
-                </NgIf>
-
                 <Grid container spacing = {1}
                     direction="row"
                     justify="flex-start"
@@ -77,4 +81,4 @@ class GridLayout extends React.PureComponent {
     }
 }
 
-export default connect(null, null)(GridLayout);
+export default connect(null, null)(FileSystem);

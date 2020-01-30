@@ -1,26 +1,12 @@
 import React from 'react';  
-import './popup/createfolder.css';  
-import { InputBase, TextField, Button, Typography } from '@material-ui/core';
-import {connect} from "react-redux";
-import {createFolderAction} from "../actions/actions";
+import './createfolder.css';  
+import { Button, Typography } from '@material-ui/core';
+import Emitter from '../../helpers/events';
 
 class ConfirmationPopup extends React.Component {  
 
     constructor(props){
         super(props);
-        this.state = {
-            name: null,
-            type: null,
-            icon: null
-        };
-    }
-
-    onSave(e) {
-        e.preventDefault();
-        if(this.state.name !== null){
-            this.props.onFolderCreate(this.state.name);
-            this.props.closePopup();
-        }
     }
 
     render() {  
@@ -35,7 +21,11 @@ class ConfirmationPopup extends React.Component {
                             <Button 
                             className = "btn"
                             disableElevation
-                            variant="contained" onClick={this.props.onClosePopup} color="secondary">
+                            variant="contained" 
+                            onClick={() => {
+                                Emitter.emit("file.deleteCancle");
+                            }}
+                            color="secondary">
                                 <Typography>
                                     No
                                 </Typography>
@@ -43,7 +33,9 @@ class ConfirmationPopup extends React.Component {
                             <Button 
                             className = "btn"
                             disableElevation
-                            variant="contained" onClick =  {this.props.onClickYes} color="primary">
+                            variant="contained" onClick = {() => {
+                                Emitter.emit("file.deleteConfirm");
+                            }} color="primary">
                                 <Typography>
                                     Yes
                                 </Typography>
@@ -56,10 +48,4 @@ class ConfirmationPopup extends React.Component {
         }  
 }  
 
-const mapDispatchToProps = dispatch => {
-    return {
-      onSave: file => dispatch(createFolderAction(file)),
-    }
-  }
-
-export default connect(null, mapDispatchToProps)(ConfirmationPopup);
+export default ConfirmationPopup;

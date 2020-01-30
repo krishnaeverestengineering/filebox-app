@@ -1,3 +1,3 @@
-import Home from "./files_dashboard"
+import Home from "./files-dashboard"
 
 export default Home;
