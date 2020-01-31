@@ -86,7 +86,7 @@ class FilesDashboard extends Component {
 
     onFileSelected = (file) => {
         this.props.history.push("?path=" + file.id)
-        this.props.dispatch(getFiles(file.id))
+        //this.props.dispatch(getFiles(file.id))
     }
 
     onFolderCreate = (name) => {

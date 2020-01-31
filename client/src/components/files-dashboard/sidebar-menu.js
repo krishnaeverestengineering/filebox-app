@@ -1,5 +1,6 @@
 import React from "react";
 import { Container } from "@material-ui/core";
+import { Link } from "react-router-dom";
 
 export default class SideMenuBar extends React.Component {
     render() {
@@ -12,7 +13,7 @@ export default class SideMenuBar extends React.Component {
                     <div className = "side-menu">
                         <ul>
                             <li>
-                                Files
+                                <Link to = "/files">Files</Link>
                             </li>
                             <li>
                                 Shared Files

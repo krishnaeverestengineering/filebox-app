@@ -1,6 +1,5 @@
 import React, { Fragment } from "react";
 import {connect} from "react-redux"
-import {getFiles} from "../../actions/actions";
 import {
     Paper,
     Menu,
@@ -9,6 +8,7 @@ import {
 import { Icon } from "../helpers/icons";
 import { NgShow } from "../helpers/ngif";
 import Emitter from "../../helpers/events";
+import { trim } from "../../helpers";
 
 class FileItem extends React.Component {
 
@@ -40,7 +40,7 @@ class FileItem extends React.Component {
 
     onItemSelected = (e) => {
         e.preventDefault();
-        this.props.dispatch(getFiles(this.props.file.path))
+        //this.props.dispatch(getFiles(this.props.file.path))
         this.props.onFileSelected(this.props.file)
     }
 
@@ -54,6 +54,7 @@ class FileItem extends React.Component {
                 onClose={this.handleOptionsClose}>
                     <MenuItem onClick = {this.handleDeleteClicked}>Delete</MenuItem>
                     <MenuItem onClick = {this.handleRenameClicked}>Rename</MenuItem>
+                    <MenuItem onClick = {this.handleRenameClicked}>Share</MenuItem>
                 </Menu>
             </Paper>
         )
@@ -100,7 +101,7 @@ class FileItem extends React.Component {
                     </div>
 
                     <div>
-                        {this.props.file.filename}
+                        {trim(this.props.file.filename)}
                     </div>
                 </Paper>
             </Fragment>

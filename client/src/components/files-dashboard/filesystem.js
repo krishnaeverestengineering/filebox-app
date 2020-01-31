@@ -30,7 +30,6 @@ class FileSystem extends React.PureComponent {
     }
 
     deleteFolder = (file) => {
-        console.log(file.filename)
         this.setState({
             confirmationPopup: true,
             file: file

@@ -22,3 +22,9 @@ export const getBearerToken = () => {
     }
     return "";
 }
+
+export const trim = (str) => {
+    if(str.length > 10)
+        return str.substr(0, 10) + "...";
+    return str;
+}
