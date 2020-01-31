@@ -129,7 +129,7 @@ class FilesDashboard extends Component {
                 <div>
                     <NgShow cond = {!this.props.loading && this.props.files.length > 0}>
                         <div className = "grid_root">
-                            <FileSystem onFileSelected = {this.onFileSelected} files = {this.props.files}/>
+                            <FileSystem files = {this.props.files}/>
                         </div>
                     </NgShow>
                     <NgIf cond = {this.props.files.length <= 0}>
@@ -143,7 +143,6 @@ class FilesDashboard extends Component {
     render() {
         return (
             <div>
-                <Header />
 
                 { this.renderConfirmationPopup() }
                 { this.renderCreateFolderPopup() }

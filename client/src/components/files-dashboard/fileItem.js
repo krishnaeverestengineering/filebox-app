@@ -1,14 +1,15 @@
 import React, { Fragment } from "react";
-import {connect} from "react-redux"
 import {
     Paper,
     Menu,
     MenuItem,
+    Typography,
 } from "@material-ui/core";
 import { Icon } from "../helpers/icons";
 import { NgShow } from "../helpers/ngif";
 import Emitter from "../../helpers/events";
 import { trim } from "../../helpers";
+import { Link } from "react-router-dom";
 
 class FileItem extends React.Component {
 
@@ -38,12 +39,6 @@ class FileItem extends React.Component {
         Emitter.emit("file.deleteClick", this.props.file);
     }
 
-    onItemSelected = (e) => {
-        e.preventDefault();
-        //this.props.dispatch(getFiles(this.props.file.path))
-        this.props.onFileSelected(this.props.file)
-    }
-
     renderFileMenuOptions = (anchorEl) => {
         return (
 <           Paper>
@@ -66,10 +61,9 @@ class FileItem extends React.Component {
             <Fragment>
 
                 { this.renderFileMenuOptions(anchorEl) }
-                
                 <Paper  
                     className = "box" 
-                    onClick = {this.onItemSelected}
+                    
                     onMouseEnter = {() => {
                         this.setState({
                             showOptions: true
@@ -95,14 +89,17 @@ class FileItem extends React.Component {
                             </div>
                         </NgShow>
                     </div>
-
-                    <div style = {{height:"70px"}}>
-                        <Icon name = "directory" width = "50px" height = "50px"/>
-                    </div>
-
-                    <div>
-                        {trim(this.props.file.filename)}
-                    </div>
+                    <Link to = {"/files?path=" + this.props.file.id}
+                    style = {{textDecoration: "none", color: "black"}}>
+                        <div style = {{height:"70px"}}>
+                            <Icon name = "directory" width = "50px" height = "50px"/>
+                        </div>
+                        <div>
+                            <Typography>
+                                {trim(this.props.file.filename)}
+                            </Typography>
+                        </div>
+                    </Link>
                 </Paper>
             </Fragment>
             
@@ -110,4 +107,4 @@ class FileItem extends React.Component {
     }
 }
 
-export default connect(null, null)(FileItem);
+export default FileItem;

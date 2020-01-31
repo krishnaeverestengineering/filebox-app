@@ -66,9 +66,6 @@ class FileSystem extends React.PureComponent {
                             return (
                                 <Grid item key = {f.id} xs = {2} >
                                         <FileItem 
-                                        deleteFolder = {this.deleteFolder}
-                                        renameFolder = {this.renameFolder}
-                                        onFileSelected = {this.props.onFileSelected}
                                         file = {f}/>
                                 </Grid>
                             )
