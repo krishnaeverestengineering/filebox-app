@@ -40,7 +40,6 @@ class FileItem extends React.Component {
 
     onItemSelected = (e) => {
         e.preventDefault();
-        console.log(this.props.file)
         this.props.dispatch(getFiles(this.props.file.path))
         this.props.onFileSelected(this.props.file)
     }

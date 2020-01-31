@@ -8,6 +8,7 @@ import {
     authenticateUserResponseAction,
     getFilesResponseAction,
 } from "../actions/actions";
+import Emitter from "../helpers/events";
 
 export const checkSignInSaga = function*(action) {
     try {
@@ -53,6 +54,9 @@ export const getFilesSaga = function*(path) {
 export const deleteFileSaga = function*(file) {
     try {
         const response = yield call(deleteFolderService, file)
+        if(response.data.ok == true) {
+            Emitter.emit("file.deleteSuccess", {})
+        }
         //yield put(getFilesResponseAction(response.data.files))
     }
     catch(err) {

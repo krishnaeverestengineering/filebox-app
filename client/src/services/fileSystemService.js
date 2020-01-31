@@ -39,8 +39,10 @@ export const getFiles = (path) => {
 }
 
 export const deleteFolderService = (file) => {
-    console.log(file)
-    return axios_instance.post("/del?id=" + file.data.id, {
+    return axios_instance.post("/del", {
+        name: file.data.filename,
+        fid: file.data.id
+    }, {
         headers: {
             "Authorization": getBearerToken()
         }

@@ -34,6 +34,7 @@ class FilesDashboard extends Component {
         Emitter.on("file.createFolderClick", this.onCreateFolderClicked);
         Emitter.on("file.createFolderCancle", this.onCreateFolderCancle);
         Emitter.on("file.createFolderConfirm", this.onCreateFolderConfirm);
+        Emitter.on("file.deleteSuccess", this.onDeleteFileDeletedSuccess);
         this.props.dispatch(getFiles(this.getPath()))
     }
 
@@ -44,6 +45,7 @@ class FilesDashboard extends Component {
         Emitter.off("file.createFolderClick");
         Emitter.off("file.createFolderCancle");
         Emitter.off("file.createFolderConfirm");
+        Emitter.off("file.deleteSuccess");
     }
 
     componentWillReceiveProps(newProps) {
@@ -76,6 +78,10 @@ class FilesDashboard extends Component {
     onCreateFolderConfirm = (name) => {
         this.onCreateFolderCancle();
         this.onFolderCreate(name);
+    }
+
+    onDeleteFileDeletedSuccess = () => {
+        this.props.dispatch(getFiles(this.getPath()));
     }
 
     onFileSelected = (file) => {
