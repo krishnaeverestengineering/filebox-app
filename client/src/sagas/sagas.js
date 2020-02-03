@@ -1,5 +1,5 @@
 import {put, call} from "redux-saga/effects";
-import {getFiles, createFolderService, deleteFolderService} from "../services/fileSystemService";
+import {getFiles, createFolderService, deleteFolderService, getTextFileContentService, editTextFileContentService} from "../services/fileSystemService";
 import {
     authenticateUserToServerService,
     getAccessToken,
@@ -33,7 +33,6 @@ export const authenticateUserToServerSaga = function*() {
 }
 
 export const createFolderSaga = function*(action) {
-    console.log(action.data.data)
     try {
         const response = yield call(createFolderService, action.data )
         yield put(getFilesResponseAction(response.data.files))
@@ -60,5 +59,25 @@ export const deleteFileSaga = function*(file) {
         //yield put(getFilesResponseAction(response.data.files))
     }
     catch(err) {
+    }
+}
+
+export const getTextFileContentSaga = function*(id) {
+    try {
+        const res = yield call(getTextFileContentService, id);
+        Emitter.emit("file.getContent", res.data)
+    }
+    catch(err) {
+
+    }
+}
+
+export const editFileContentSaga = function*(action) {
+    try {
+        const res = yield call(editTextFileContentService, action.data);
+        console.log(res)
+    }   
+    catch(err) {
+
     }
 }

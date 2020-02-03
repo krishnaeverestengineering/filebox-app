@@ -64,3 +64,27 @@ export const renameFolderService = (file) => {
         return e;
     });
 }
+
+export const getTextFileContentService = (file) => {
+    return axios_instance.get("/open?file=" + file.fid, {
+        headers: {
+            "Authorization": getBearerToken()
+        }
+    }).then(res => {
+        return res;
+    }).catch(e => {
+        return e;
+    });
+}
+
+export const editTextFileContentService = (data) => {
+    return axios_instance.post("/edit", data, {
+        headers: {
+            "Authorization": getBearerToken()
+        }
+    }).then(res => {
+        return res;
+    }).catch(e => {
+        return e;
+    });
+}

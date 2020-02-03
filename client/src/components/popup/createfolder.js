@@ -23,7 +23,7 @@ class CreateFolderPopup extends React.Component {
                         </div>
                         <div>
                             <form noValidate autoComplete="off">
-                                <TextField id="standard-basic" label="Folder Name" 
+                                <TextField id="standard-basic" label="Name" 
                                 onChange={(e) => this.setState({name: e.target.value})}
                                 style={{width: "340px"}}
                                 required/>

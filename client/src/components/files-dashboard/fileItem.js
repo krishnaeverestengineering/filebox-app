@@ -9,7 +9,6 @@ import { Icon } from "../helpers/icons";
 import { NgShow } from "../helpers/ngif";
 import Emitter from "../../helpers/events";
 import { trim } from "../../helpers";
-import { Link } from "react-router-dom";
 
 class FileItem extends React.Component {
 
@@ -89,17 +88,21 @@ class FileItem extends React.Component {
                             </div>
                         </NgShow>
                     </div>
-                    <Link to = {"/files?path=" + this.props.file.id}
+                    <div
+                    onClick = {() => {
+                        Emitter.emit("file.select", this.props.file)
+                    }}
                     style = {{textDecoration: "none", color: "black"}}>
                         <div style = {{height:"70px"}}>
-                            <Icon name = "directory" width = "50px" height = "50px"/>
+                            <Icon name = {this.props.file.ext}
+                             width = "50px" height = "50px"/>
                         </div>
                         <div>
                             <Typography>
                                 {trim(this.props.file.filename)}
                             </Typography>
                         </div>
-                    </Link>
+                    </div>
                 </Paper>
             </Fragment>
             

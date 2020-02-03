@@ -24,10 +24,13 @@ class FilesDashboard extends Component {
             confirmationPopup: false,
             createFolderPopup: false,
             selectedFile: null,
+            textFile: null,
         }
     }
 
     componentDidMount() {
+        Emitter.on("file.select", this.onFileSelected);
+        Emitter.on("file.create", this.onTextFileCreateClicked);
         Emitter.on("file.deleteClick", this.onDeleteClicked);
         Emitter.on("file.deleteCancle", this.onDeleteFolderCancle);
         Emitter.on("file.deleteConfirm", this.onDeleteFolderConfirm);
@@ -39,6 +42,8 @@ class FilesDashboard extends Component {
     }
 
     componentWillUnmount() {
+        Emitter.off("file.select");
+        Emitter.off("file.create");
         Emitter.off("file.deleteClick");
         Emitter.off("file.deleteCancle");
         Emitter.off("file.deleteConfirm");
@@ -72,12 +77,16 @@ class FilesDashboard extends Component {
     }
 
     onCreateFolderCancle = () => {
-        this.setState({ createFolderPopup: false })
+        this.setState({ createFolderPopup: false, textFile: null })
     }
 
     onCreateFolderConfirm = (name) => {
         this.onCreateFolderCancle();
-        this.onFolderCreate(name);
+        if(this.state.textFile != null) {
+            this.onFileCreateClicked({data: this.state.textFile, name: name});
+        } else {
+            this.onFolderCreate(name);
+        }
     }
 
     onDeleteFileDeletedSuccess = () => {
@@ -85,15 +94,37 @@ class FilesDashboard extends Component {
     }
 
     onFileSelected = (file) => {
-        this.props.history.push("?path=" + file.id)
+        if(file.type == 1)
+            this.props.history.push("?path=" + file.id)
+        else if(file.type == 0) {
+            window.open( 
+                "http://me.filebox.com:3000/edit/"  +file.id, "_blank"); 
+            //this.props.history.push("/edit/" + file.id)
+        }
         //this.props.dispatch(getFiles(file.id))
     }
 
     onFolderCreate = (name) => {
         this.props.dispatch(createFolderAction({
             name: name,
-            pid: this.getPath()
+            pid: this.getPath(),
+            fileType: 1,
+            fileFormat: "directory"
         }));
+    }
+
+    onFileCreateClicked = (payload) => {
+        console.log(payload);
+        this.props.dispatch(createFolderAction({
+            name: payload.name,
+            pid: this.getPath(),
+            fileType: payload.data.fileType,
+            fileFormat: payload.data.fileFormat
+        }));
+    }
+
+    onTextFileCreateClicked = (payload) => {
+        this.setState({createFolderPopup: true, textFile: payload})
     }
 
     getPath = () => {
@@ -115,7 +146,7 @@ class FilesDashboard extends Component {
     renderCreateFolderPopup = () => {
         return (
             <NgIf cond = {this.state.createFolderPopup}>
-                <CreateFolderPopup text='Create Folder' />  
+                <CreateFolderPopup text='New File/Folder' />  
             </NgIf> 
         )
     }
@@ -146,7 +177,7 @@ class FilesDashboard extends Component {
 
                 { this.renderConfirmationPopup() }
                 { this.renderCreateFolderPopup() }
-                
+
                 <div className = "root">
                     <Container maxWidth = "xl">
                         <Grid container>
@@ -154,7 +185,7 @@ class FilesDashboard extends Component {
                                 <SideMenuBar />
                             </Grid>
                             <Grid item xs = {7}>
-                                { this.renderFileSystem() }
+                                {this.renderFileSystem()}
                             </Grid>
                             <Grid item xs = {2}>
                                 <div>

@@ -65,8 +65,7 @@ class FileSystem extends React.PureComponent {
                         this.props.files.map(f => {
                             return (
                                 <Grid item key = {f.id} xs = {2} >
-                                        <FileItem 
-                                        file = {f}/>
+                                        <FileItem file = {f}/>
                                 </Grid>
                             )
                         })

@@ -61,3 +61,11 @@ export const renameFolderAction = (file) => {
         data: file,
     })
 }
+
+export const getFileContentAction = (id) => {
+    return ({fid: id, type: types.GET_FILE_CONTENT})
+}
+
+export const editTextFileContentAction = (data) => {
+    return ({type: types.EDIT_FILE_CONTENT, data: data})
+}
